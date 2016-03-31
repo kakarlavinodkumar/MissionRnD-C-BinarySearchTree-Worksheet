@@ -31,7 +31,40 @@ struct node{
 
 
 
+struct node* search(struct node *head, int key)
+{
+	if (head != NULL)
+	{
+		if (key == (head->data))
+			return head;
+		if (key > head->data)
+			return search(head->right, key);
+		else
+			return search(head->left, key);
+	}
+}
+
+
 int* BSTRighttoLeftRows(struct node* root)
 {
-    return NULL;
+	int read_index, write_index, *arr, end_index, start_index;
+	if (root == NULL)
+		return NULL;
+	arr = (int *)malloc(sizeof(int)* 20);
+	struct node *search_key;
+	arr[0] = root->data;
+	for (read_index = 0, write_index = 1;; read_index = end_index)
+	{
+		for (start_index = read_index, end_index = write_index; start_index <end_index; start_index++)
+		{
+			search_key = search(root, arr[start_index]);
+			if (search_key->right != NULL)
+				arr[write_index++] = (search_key->right)->data;
+			if (search_key->left != NULL)
+				arr[write_index++] = (search_key->left)->data;
+		}
+		if (end_index == write_index)
+			break;
+	}
+	return arr;
 }

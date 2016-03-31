@@ -32,6 +32,43 @@ struct node{
 	struct node *right;
 };
 
-void fix_bst(struct node *root){
 
+void inorder_traversal(struct node *head, int **arr, int *index)
+{
+	if (head != NULL)
+	{
+		inorder_traversal(head->left, arr, index);
+		arr[*index] = &head->data;
+		(*index) = *index + 1;
+		inorder_traversal(head->right, arr, index);
+	}
+}
+void swap(int **arr, int index1, int index2)
+{
+	int temp;
+	temp = *(arr[index1]);
+	*(arr[index1]) = *(arr[index2]);
+	*(arr[index2]) = temp;
+}
+void fix_bst(struct node *root){
+	int **arr, index = 0, index1, rev_index1 = -1, rev_index2 = -1;
+	if (root == NULL)
+		return;
+	arr = (int **)malloc(sizeof(int*)* 20);
+	inorder_traversal(root, arr, &index);
+	for (index1 = 0; index1 < index - 1; index1++)
+	{
+		if (*(arr[index1])>*(arr[index1 + 1]))
+		{
+			if (rev_index1 == -1)
+			{
+				rev_index1 = index1;
+				rev_index2 = rev_index1 + 1;
+			}
+			else
+				rev_index2 = index1 + 1;
+		}
+	}
+	if (rev_index1 != -1 && rev_index2 != -1)
+		swap(arr, rev_index1, rev_index2);
 }

@@ -33,9 +33,52 @@ struct node{
 	struct node *right;
 };
 
+ 
 
+
+struct node* balance_binary_search_tree(struct node *root, int *arr, int low, int high)
+{
+	struct node *newnode, *current;
+	int mid;
+	if (low <= high)
+	{
+		mid = (low + high) / 2;
+		newnode = (struct node*)malloc(sizeof(node));
+		newnode->left = newnode->right = NULL;
+		newnode->data = arr[mid];
+		if (root == NULL)
+			root = newnode;
+		else
+		{
+			for (current = root;;)
+			{
+				if (newnode->data > current->data)
+				{
+					if (current->right == NULL)
+						break;
+					current = current->right;
+				}
+				else
+				{
+					if (current->left == NULL)
+						break;
+					current = current->left;
+				}
+			}
+			if (newnode->data > current->data)
+				current->right = newnode;
+			else
+				current->left = newnode;
+		}
+		balance_binary_search_tree(root, arr, low, mid - 1);
+		balance_binary_search_tree(root, arr, mid + 1, high);
+	}
+	return root;
+}
 struct node * convert_array_to_bst(int *arr, int len){
-	
-	return NULL;
+	struct node *root = NULL;
+	if (arr == NULL || len <= 0)
+		return NULL;
+	return 	balance_binary_search_tree(root, arr, 0, len - 1);
 }
 
